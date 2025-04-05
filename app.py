@@ -25,9 +25,20 @@ def upload():
         return render_template('result.html', filename=file.filename, bg_color=bg_color)
 
 # ホームページ表示用（アップロードフォーム）
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.route('/upload', methods=['POST'])
+def upload():
+    if 'file' not in request.files:
+        return "ファイルが送信されていません（'file' が見つかりません）", 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return "ファイル名が空です", 400
+
+    filepath = os.path.join('static/uploads', file.filename)
+    file.save(filepath)
+
+    bg_color = get_dominant_color(filepath)
+    return render_template('result.html', filename=file.filename, bg_color=bg_color)
 
 # Render用のポート設定
 if __name__ == '__main__':
