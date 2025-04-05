@@ -3,12 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>キャラ画像アップロード</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    input[type="file"] {
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-  <h1>キャラ画像をアップして、ホームページを作ろう！</h1>
+  <h1>キャラ画像をアップロードして背景色を自動生成！</h1>
+
+  <!-- 🔽 ここが超重要なフォーム設定です -->
   <form action="/upload" method="POST" enctype="multipart/form-data">
-    <input type="file" name="image">
-    <button type="submit">アップロードして生成</button>
+    <input type="file" name="file" required>
+    <br>
+    <button type="submit">作成</button>
   </form>
 </body>
 </html>
