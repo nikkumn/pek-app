@@ -1,43 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>キャラの紹介ページ</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: sans-serif;
+      background-color: rgb({{ bg_color[0] }}, {{ bg_color[1] }}, {{ bg_color[2] }});
+    }
 
-    <!DOCTYPE html>
-    <html lang="ja">
-    <head>
-      <meta charset="UTF-8">
-      <title>キャラプロフィール</title>
-      <style>
-        body {
-          background: linear-gradient(to bottom, #ffeaff, #ffffff);
-          font-family: 'Rounded Mplus 1c', 'Arial Rounded MT Bold', sans-serif;
-          text-align: center;
-          padding: 40px;
-          color: #444;
-        }
-        h1 {
-          font-size: 2rem;
-          color: #ff66cc;
-        }
-        img {
-          border-radius: 20px;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-          max-width: 300px;
-          margin-top: 20px;
-        }
-        .card {
-          background: #fff;
-          border-radius: 16px;
-          padding: 20px;
-          max-width: 500px;
-          margin: 0 auto;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-      </style>
-    </head>
-    <body>
-      <div class="card">
-        <h1>あなたのキャラページができました！</h1>
-        <img src="/static/uploads\peko1.JPG" alt="キャラ画像">
-        <p>かわいいですね！また会いにきてね♪</p>
-      </div>
-    </body>
-    </html>
-    
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    img {
+      max-width: 300px;
+      height: auto;
+      border: 5px solid #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>このキャラの世界観！</h1>
+  <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="アップロード画像">
+</body>
+</html>
