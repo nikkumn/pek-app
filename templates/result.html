@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>キャラの紹介ページ</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: sans-serif;
+      background-color: rgb({{ bg_color[0] }}, {{ bg_color[1] }}, {{ bg_color[2] }});
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    img {
+      max-width: 300px;
+      height: auto;
+      border: 5px solid #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>このキャラの世界観！</h1>
+  <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="アップロード画像">
+</body>
+</html>
