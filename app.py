@@ -11,13 +11,14 @@ def get_dominant_color(image_path):
     dominant_color = color_thief.get_color(quality=1)
     return dominant_color  # (R, G, B)
 
-# ✅ ChatGPTでキャラの紹介文を生成
+# ✅ ChatGPTでキャラの紹介文を生成（モデル切り替え対応！）
 def generate_character_intro(filename):
     prompt = f"このキャラクター画像のファイル名「{filename}」から想像して、性格・雰囲気・世界観を200文字以内で紹介してください。"
     openai.api_key = os.environ.get("OPENAI_API_KEY")  # Renderの環境変数から取得
+    model_name = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")  # ← モデル切り替え対応！
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # 高速で安価
+        model=model_name,
         messages=[{"role": "user", "content": prompt}],
         temperature=0.8,
         max_tokens=200
