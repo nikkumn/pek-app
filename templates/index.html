@@ -11,6 +11,7 @@
     }
     input[type="file"] {
       margin: 20px 0;
+      font-size: 1em;
     }
     button {
       padding: 10px 20px;
@@ -24,15 +25,29 @@
     button:hover {
       background-color: #45a049;
     }
+
+    /* 🔽 スマホ向けの見やすさ・押しやすさ調整 */
+    @media (max-width: 600px) {
+      input[type="file"] {
+        font-size: 1.2em;
+      }
+      button {
+        font-size: 1.2em;
+        padding: 15px 30px;
+        width: 80%;
+        max-width: 300px;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>キャラ画像をアップロードして背景色を自動生成！</h1>
+  <h1>キャラ画像からホームページを自動生成！</h1>
 
   <!-- 🔽 ここが超重要なフォーム設定です -->
-<form action="/upload" method="post" enctype="multipart/form-data">
-  <input type="file" name="file" required>
-  <button type="submit">ホームページを作成する</button>
-</form>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <br>
+    <button type="submit">作成</button>
+  </form>
 </body>
 </html>
