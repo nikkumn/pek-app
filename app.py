@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from colorthief import ColorThief
 import openai
 import os
@@ -7,13 +7,13 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-# ✅ 画像から主な色を取得（背景色用）
+# ✅ 画像から主な色を取得
 def get_dominant_color(image_path):
     color_thief = ColorThief(image_path)
     dominant_color = color_thief.get_color(quality=1)
     return dominant_color  # (R, G, B)
 
-# ✅ ChatGPTでキャラの紹介文を生成
+# ✅ ChatGPTで紹介文を生成
 def generate_character_intro(filename):
     prompt = f"このキャラクター画像のファイル名「{filename}」から想像して、性格・雰囲気・世界観を200文字以内で紹介してください。"
     openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -26,12 +26,12 @@ def generate_character_intro(filename):
     )
     return response.choices[0].message["content"]
 
-# ✅ トップページ（フォーム）
+# ✅ トップページ（アップロード画面）
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# ✅ アップロード＆生成処理
+# ✅ アップロード処理＋ユニークURLにリダイレクト
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'file' not in request.files:
@@ -47,12 +47,19 @@ def upload():
     filepath = os.path.join('static/uploads', unique_filename)
     file.save(filepath)
 
+    # 結果ページへリダイレクト（ユニークURLでアクセス）
+    return redirect(url_for('result', filename=unique_filename))
+
+# ✅ 結果ページ（ユニークURL）
+@app.route('/result/<filename>')
+def result(filename):
+    filepath = os.path.join('static/uploads', filename)
     bg_color = get_dominant_color(filepath)
-    intro_text = generate_character_intro(unique_filename)
+    intro_text = generate_character_intro(filename)
 
     return render_template(
         'result.html',
-        filename=unique_filename,
+        filename=filename,
         bg_color=bg_color,
         intro_text=intro_text
     )
