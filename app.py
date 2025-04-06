@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 from colorthief import ColorThief
 import openai
 import os
+import uuid
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -11,14 +13,13 @@ def get_dominant_color(image_path):
     dominant_color = color_thief.get_color(quality=1)
     return dominant_color  # (R, G, B)
 
-# ✅ ChatGPTでキャラの紹介文を生成（モデル切り替え対応！）
+# ✅ ChatGPTでキャラの紹介文を生成
 def generate_character_intro(filename):
     prompt = f"このキャラクター画像のファイル名「{filename}」から想像して、性格・雰囲気・世界観を200文字以内で紹介してください。"
-    openai.api_key = os.environ.get("OPENAI_API_KEY")  # Renderの環境変数から取得
-    model_name = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")  # ← モデル切り替え対応！
+    openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     response = openai.ChatCompletion.create(
-        model=model_name,
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.8,
         max_tokens=200
@@ -40,20 +41,20 @@ def upload():
     if file.filename == '':
         return "ファイル名が空です", 400
 
-    filepath = os.path.join('static/uploads', file.filename)
+    ext = os.path.splitext(file.filename)[1]
+    unique_filename = secure_filename(str(uuid.uuid4()) + ext)
+
+    filepath = os.path.join('static/uploads', unique_filename)
     file.save(filepath)
 
-    # 背景色取得
     bg_color = get_dominant_color(filepath)
-
-    # ChatGPTで紹介文生成
-    intro_text = generate_character_intro(file.filename)
+    intro_text = generate_character_intro(unique_filename)
 
     return render_template(
         'result.html',
-        filename=file.filename,
+        filename=unique_filename,
         bg_color=bg_color,
-        intro_text=intro_text  # 紹介文をテンプレートに渡す！
+        intro_text=intro_text
     )
 
 # ✅ Render対応：ポート指定
